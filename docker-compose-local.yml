@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+
+  # Refer https://hub.docker.com/_/postgres
+  mylocal_postgresdb_v15:
+    image: postgres:15-alpine
+    restart: always
+    volumes:
+      - $PWD/data/localPostgreSQL:/var/lib/postgresql/data
+      - $PWD/conf:/etc/postgresql/postgresql.conf
+      # - $PWD/init/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - $PWD/initdb/:/docker-entrypoint-initdb.d/
+    ports:
+      - 6432:5432
+    environment:
+      DOCKER_DEFAULT_PLATFORM: linux/amd64
+      POSTGRES_DB: sampleDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+      # PGDATA: /var/lib/postgresql/data
+
+# If you need to generate a sample conf file
+# docker run -i --rm postgres:15-alpine cat /usr/local/share/postgresql/postgresql.conf.sample > conf/my-postgres.conf
+# chmod 777 initdb/init-user-db.sh
